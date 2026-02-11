@@ -17,10 +17,10 @@
         .lenis.lenis-stopped { overflow: hidden; }
 
         :root {
-            --primary: #0B192C; /* Tiefes, edles Navy */
+            --primary: #0B192C; 
             --primary-light: #1A365D;
-            --accent: #E53935; /* Klares Premium-Rot */
-            --bg-main: #F8FAFC; /* Ganz leichtes Off-White für Sauberkeit */
+            --accent: #E53935; 
+            --bg-main: #F8FAFC; 
             --bg-white: #FFFFFF;
             --text-dark: #0F172A;
             --text-muted: #64748B;
@@ -31,12 +31,20 @@
             --shadow-hover: 0 30px 60px -20px rgba(11, 25, 44, 0.15);
         }
 
+        /* --- ANTI-WOBBLE RESET --- */
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
+        html, body {
+            width: 100%;
+            max-width: 100%;
+            overflow-x: hidden !important; /* Verhindert das Wackeln auf Mobile zu 100% */
+            position: relative;
+        }
+
         body {
             font-family: 'Inter', sans-serif; background-color: var(--bg-main);
             color: var(--text-dark); line-height: 1.6;
-            -webkit-font-smoothing: antialiased; overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
         }
 
         h1, h2, h3 { font-family: 'Outfit', sans-serif; color: var(--primary); line-height: 1.1; letter-spacing: -0.03em; }
@@ -97,8 +105,17 @@
         .img-1 { height: 500px; transform: translateY(40px); }
         .img-2 { height: 400px; }
 
-        /* --- MARQUEE (Laufband) --- */
-        .marquee-section { padding: 40px 0; background: var(--primary); color: white; overflow: hidden; transform: rotate(-2deg); margin: 60px -20px; width: calc(100% + 40px); }
+        /* --- MARQUEE (Wobble Fix) --- */
+        .marquee-container {
+            width: 100%;
+            overflow: hidden; /* Sperrt das Laufband ein, verhindert horizontales Scrollen */
+            padding: 60px 0;
+        }
+        .marquee-section { 
+            padding: 40px 0; background: var(--primary); color: white; 
+            transform: rotate(-2deg) scale(1.05); /* Scale verhindert weiße Ecken bei Rotation */
+            width: 100%; 
+        }
         .marquee-inner { display: flex; width: max-content; animation: marquee 20s linear infinite; }
         .marquee-item { font-family: 'Outfit'; font-size: 2.5rem; font-weight: 800; padding: 0 40px; display: flex; align-items: center; gap: 40px; text-transform: uppercase; }
         .marquee-item span { color: var(--accent); }
@@ -125,14 +142,14 @@
         .contact-box { background: var(--primary); border-radius: var(--radius-lg); overflow: hidden; display: grid; grid-template-columns: 1fr 1fr; margin-top: 60px; }
         .contact-info { padding: 80px; color: white; display: flex; flex-direction: column; justify-content: center; }
         .contact-info h2 { color: white; }
-        .contact-form { background: white; padding: 80px; margin: 8px; border-radius: calc(var(--radius-lg) - 8px); }
+        .contact-form { background: white; padding: 60px; margin: 8px; border-radius: calc(var(--radius-lg) - 8px); }
         input, textarea { width: 100%; padding: 18px 24px; background: var(--bg-main); border: 1px solid rgba(0,0,0,0.05); border-radius: 16px; margin-bottom: 20px; font-family: inherit; font-size: 1rem; transition: 0.3s; }
         input:focus, textarea:focus { background: white; border-color: var(--accent); outline: none; box-shadow: 0 0 0 4px rgba(229, 57, 53, 0.1); }
 
         footer { text-align: center; padding: 40px; color: var(--text-muted); font-size: 0.9rem; }
 
         /* ========================================= */
-        /* --- MOBILE RESPONSIVENESS (THE FIX) --- */
+        /* --- MOBILE RESPONSIVENESS --- */
         /* ========================================= */
         @media (max-width: 991px) {
             h1 { font-size: 3.5rem; }
@@ -155,18 +172,20 @@
             
             /* Hero Adjustments */
             .hero { padding-top: 140px; text-align: left; }
-            .hero-images { display: none; /* Hide complex images on mobile for cleaner look */ }
+            .hero-images { display: none; }
             
             /* Marquee */
-            .marquee-section { transform: rotate(0); margin: 40px 0; width: 100%; }
+            .marquee-container { padding: 40px 0; }
+            .marquee-section { transform: rotate(0) scale(1); width: 100%; padding: 20px 0; }
             .marquee-item { font-size: 1.8rem; }
 
-            /* Contact Adjustments */
-            .contact-info { padding: 40px; }
-            .contact-form { padding: 30px; margin: 0; border-radius: 0; }
+            /* Contact Adjustments - Fixed padding to prevent overflow */
+            .contact-box { margin-top: 40px; border-radius: var(--radius-md); }
+            .contact-info { padding: 40px 24px; }
+            .contact-form { padding: 40px 24px; margin: 0; border-radius: 0 0 var(--radius-md) var(--radius-md); }
             
             /* Slider Adjustments */
-            .ba-slider-container { aspect-ratio: 4/3; }
+            .ba-slider-container { aspect-ratio: 4/3; margin-top: 40px; }
         }
     </style>
 </head>
@@ -203,11 +222,13 @@
             </div>
         </section>
 
-        <div class="marquee-section">
-            <div class="marquee-inner">
-                <div class="marquee-item">
-                    Besenrein <span>✦</span> 100% Festpreis <span>✦</span> Schnell & Diskret <span>✦</span> Umweltgerecht <span>✦</span>
-                    Besenrein <span>✦</span> 100% Festpreis <span>✦</span> Schnell & Diskret <span>✦</span> Umweltgerecht <span>✦</span>
+        <div class="marquee-container">
+            <div class="marquee-section">
+                <div class="marquee-inner">
+                    <div class="marquee-item">
+                        Besenrein <span>✦</span> 100% Festpreis <span>✦</span> Schnell & Diskret <span>✦</span> Umweltgerecht <span>✦</span>
+                        Besenrein <span>✦</span> 100% Festpreis <span>✦</span> Schnell & Diskret <span>✦</span> Umweltgerecht <span>✦</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -244,12 +265,10 @@
                 
                 <div class="ba-slider-container fade-up" id="baSlider">
                     <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80" class="ba-img" alt="Nachher">
-                    
                     <div class="ba-overlay" id="baOverlay">
                         <img src="https://images.unsplash.com/photo-1584622650111-993a426fbf0a?auto=format&fit=crop&q=80" class="ba-img" id="baImageFront" alt="Vorher">
                         <div class="ba-label label-before">Vorher</div>
                     </div>
-                    
                     <div class="ba-handle" id="baHandle">↔</div>
                     <div class="ba-label label-after">Nachher</div>
                 </div>
@@ -290,7 +309,7 @@
     <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
 
     <script>
-        // 1. Mobile Menu Logic (Der Fix für Handys)
+        // 1. Mobile Menu Logic
         const menuBtn = document.getElementById('menuBtn');
         const navLinks = document.getElementById('navLinks');
         const menuItems = document.querySelectorAll('.menu-item');
@@ -307,14 +326,13 @@
             });
         });
 
-        // 2. Before/After Slider Logic (Performant)
+        // 2. Before/After Slider Logic
         const slider = document.getElementById('baSlider');
         const overlay = document.getElementById('baOverlay');
         const handle = document.getElementById('baHandle');
         const frontImage = document.getElementById('baImageFront');
         let isSliding = false;
 
-        // Ensure front image stays full width of container
         function updateImageWidth() { frontImage.style.width = slider.offsetWidth + 'px'; }
         window.addEventListener('load', updateImageWidth);
         window.addEventListener('resize', updateImageWidth);
@@ -338,14 +356,13 @@
         window.addEventListener('touchmove', (e) => { if (isSliding) moveSlider(e.touches[0].clientX); }, {passive: true});
 
         // 3. Smooth Scroll Setup (Lenis)
-        const lenis = new Lenis({ duration: 1.2, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smooth: true });
+        const lenis = new Lenis({ duration: 1.2, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smooth: true, smoothTouch: false });
         function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
         requestAnimationFrame(raf);
 
-        // 4. GSAP Animations (Die coolen Effekte)
+        // 4. GSAP Animations
         gsap.registerPlugin(ScrollTrigger);
         
-        // Text Reveal
         const splitTypes = document.querySelectorAll('.split-text');
         splitTypes.forEach((char) => {
             const text = new SplitType(char, { types: 'words, chars' });
@@ -355,7 +372,6 @@
             });
         });
 
-        // Simple Fade Up
         gsap.utils.toArray('.fade-up').forEach((el) => {
             gsap.from(el, {
                 scrollTrigger: { trigger: el, start: 'top 85%' },
@@ -363,7 +379,6 @@
             });
         });
 
-        // Parallax for Hero Images (only on desktop)
         if(window.innerWidth > 991) {
             gsap.to('.img-1', { yPercent: -15, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true }});
             gsap.to('.img-2', { yPercent: 20, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true }});
